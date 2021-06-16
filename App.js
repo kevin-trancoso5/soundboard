@@ -8,7 +8,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SearchView from "./components/Search/SearchView";
-import SamplerView from "./components/Sampler/SamplerView";
+import SamplerScreen from "./components/Navigation/SamplerStackScreen";
 import LibraryScreen from "./components/Navigation/LibraryStackScreen";
 
 const Tabs = createBottomTabNavigator();
@@ -46,7 +46,7 @@ const App = () => {
           }}
         >
           <Tabs.Screen name="Search">{(props) => <SearchView />}</Tabs.Screen>
-          <Tabs.Screen name="Sampler">{(props) => <SamplerView />}</Tabs.Screen>
+          <Tabs.Screen name="Sampler">{(props) => <SamplerScreen />}</Tabs.Screen>
           <Tabs.Screen name="Library">{(props) => <LibraryScreen />}</Tabs.Screen>
         </Tabs.Navigator>
       </NavigationContainer>

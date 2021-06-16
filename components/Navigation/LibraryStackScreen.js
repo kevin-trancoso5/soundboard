@@ -11,10 +11,37 @@ const LibraryScreen = () => {
       <SearchStack.Screen
         name="Library"
         component={LibraryView}
+        options={{
+          title: "MY LIBRARY",
+          headerStyle: {
+            backgroundColor: "#223343",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontSize: 32,
+            fontWeight: "700",
+            textAlign: "center",
+          },
+        }}
       />
-      <SearchStack.Screen name="Record" component={RecordView} />
+      <SearchStack.Screen
+        name="Record"
+        component={RecordView}
+        options={{
+          title: "RECORD",
+          headerStyle: {
+            backgroundColor: "#223343",
+          },
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontSize: 32,
+            fontWeight: "700",
+            textAlign: "center",
+          },
+        }}
+      />
     </SearchStack.Navigator>
   );
-}
+};
 
 export default LibraryScreen;

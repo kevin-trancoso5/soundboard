@@ -4,14 +4,13 @@ import { useSelector } from "react-redux";
 import SamplerItem from "./SamplerItem";
 import { samplerSelector } from "./samplerSlice";
 
-const SamplerView = () => {
+const SamplerView = ({ route, navigation }) => {
   const sampler = useSelector(samplerSelector);
   return (
     <View style={styles.container}>
-        <Text style={styles.title}>Sampler</Text>
       <FlatList
         numColumns={4}
-        renderItem={({ item }) => <SamplerItem {...item} />}
+        renderItem={({ item }) => <SamplerItem navigation={navigation} {...item} />}
         keyExtractor={(item) => item.id.toString()}
         data={sampler}
       />

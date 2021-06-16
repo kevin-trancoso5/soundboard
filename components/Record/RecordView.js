@@ -1,10 +1,41 @@
-import React from "react";
-import { Button, FlatList, View, StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
-
+import React, { useState } from "react";
+import { Button, View, StyleSheet, TextInput } from "react-native";
+import { useDispatch } from "react-redux";
+import { Audio } from "expo-av";
+import { addLibrary } from "../Library/librarySlice";
 
 const RecordView = ({ route, navigation }) => {
   const [recording, setRecording] = React.useState();
+  const [uri, setUri] = React.useState();
+  const [sound, setSound] = React.useState();
+  const [state, setState] = useState({
+    s: "",
+  });
+  const dispatch = useDispatch();
+
+  const add = () => {
+    
+    dispatch(addLibrary({ name: state.s, uri: uri, type: "uri" }));
+    navigation.navigate("Library", {});
+  };
+
+  async function playRecordedSound() {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync({ uri: uri });
+    setSound(sound);
+
+    console.log("Playing Sound");
+    await sound.playAsync();
+  }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
   async function startRecording() {
     try {
@@ -29,9 +60,10 @@ const RecordView = ({ route, navigation }) => {
 
   async function stopRecording() {
     console.log("Stopping recording..");
+    setUri(recording.getURI());
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
-    const uri = recording.getURI();
+
     console.log("Recording stopped and stored at", uri);
   }
 
@@ -41,17 +73,56 @@ const RecordView = ({ route, navigation }) => {
         title={recording ? "Stop Recording" : "Start Recording"}
         onPress={recording ? stopRecording : startRecording}
       />
+      {uri ? (
+        <View style={styles.form}>
+          <Button title="Play sound" onPress={playRecordedSound} />
+          <TextInput
+            style={styles.search}
+            onChangeText={(text) =>
+              setState((prevState) => {
+                return { ...prevState, s: text };
+              })
+            }
+            placeholder="Entrez un nom..."
+            value={state.s}
+          />
+          <Button title="Save to Library" onPress={state.s ? add : null} />
+        </View>
+      ) : (
+        <View></View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  });
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#223343",
+    flex: 1,
+    paddingTop: 30,
+  },
+  search: {
+    fontSize: 20,
+    fontWeight: "300",
+    padding: 20,
+    width: "100%",
+    backgroundColor: "#FFF",
+    borderRadius: 8,
+    marginTop: 40,
+    marginBottom: 40,
+  },
+  form: {
+    fontSize: 20,
+    fontWeight: "300",
+    padding: 20,
+    width: "30%",
+    backgroundColor: "#334453",
+    borderRadius: 8,
+    marginTop: 40,
+    marginBottom: 40,
+  },
+});
 
 export default RecordView;

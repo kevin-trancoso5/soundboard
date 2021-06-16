@@ -51,7 +51,7 @@ export default function SearchView() {
         renderItem={(result) => (
           <View style={styles.result}>
             <Text style={styles.heading}> {result.item.name}</Text>
-            <Button onPress={() => {
+            <Button title="add" onPress={() => {
 
 
             }}></Button>
